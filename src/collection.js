@@ -47,6 +47,8 @@ class Collection {
 
     this.name = n;
     this.schema = schema;
+	
+	  this.lastId = 0;
 
     this.lastModified = time();
     this.entries = [];
@@ -68,11 +70,13 @@ class Collection {
         schema: cschema,
         lastModified,
         entries,
+		lastId,
       } = data;
 
       this.schema = isEmpty(schema) ? cschema : schema;
       this.lastModified = lastModified;
       this.entries = entries;
+	  this.lastId = lastId;
     }
 
     C.set(n, this);
@@ -83,10 +87,12 @@ class Collection {
   onchange() {
     const lastModified = time();
     this.lastModified = lastModified;
+	  //this.lastId = this.lastId + 1;
     writeFile(this.file, {
       name: this.name,
       lastModified,
       schema: this.schema,
+	    lastId: this.lastId,
       entries: this.all(),
     });
   }
@@ -106,12 +112,15 @@ class Collection {
 
     const entries = this.all();
 
+    console.log('this.schema: ', this.schema)
     const schema = this.schema;
     const noSchema = isEmpty(schema);
+    console.log('isEmptyShema: ',schema)
 
     const addOne = (entry) => {
-      const id = genid(32);
-      entry._id_ = id;
+     // const id = this.lasId + 1//genid(32);
+	    this.lastId = this.lastId + 1;
+      entry._id_ = `${this.lastId}`;//id;
       entry._ts_ = time();
 
       if (!noSchema) {
