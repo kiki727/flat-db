@@ -70,13 +70,13 @@ class Collection {
         schema: cschema,
         lastModified,
         entries,
-		lastId,
+		    lastId,
       } = data;
 
       this.schema = isEmpty(schema) ? cschema : schema;
       this.lastModified = lastModified;
       this.entries = entries;
-	  this.lastId = lastId;
+	    this.lastId = lastId;
     }
 
     C.set(n, this);
